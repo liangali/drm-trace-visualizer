@@ -4,7 +4,7 @@ import json
 if len(sys.argv) == 2:
     logfile = sys.argv[1]
 else:
-    logfile = "f:\\trace.log"
+    logfile = "F:\\work\\TGL_scalability_VT_hang\\trace_hang_f100.log"
 
 class EventItem():
     def __init__(self, line):
@@ -232,6 +232,16 @@ class EventA():
         out = out + '"ts":"' + self.ts + '"}, \n'
         return out
 
+def removeDuplicatedSeqno(el):
+    prev_seqno = ''
+    removed = []
+    for e in el:
+        if e.seqno == prev_seqno:
+            removed.append(e)
+        prev_seqno = e.seqno
+    for r in removed:
+        el.remove(r)
+
 def buildJsonProc(tdb, outjson):
     for p in tdb.procs:
         arg = '{"name":"' + p + '"}'
@@ -266,6 +276,8 @@ def buildJsonEngine(tdb, outjson):
     for ctx in tdb.ctxs:
         eli = tdb.getEventsByNameAndCtx('i915_request_in', ctx)
         elo = tdb.getEventsByNameAndCtx('i915_request_out', ctx)
+        removeDuplicatedSeqno(eli)
+        removeDuplicatedSeqno(elo)
         prev_seqno = ''
         for i in eli:
             found = 0
@@ -273,10 +285,6 @@ def buildJsonEngine(tdb, outjson):
                 if i.seqno == o.seqno:
                     found = 1
                     name = i.seqno
-                    if o.complete == "0":
-                        name = name+"a"
-                    if prev_seqno == i.seqno:
-                        name = name+"b"
                     pid, tid = i.engine.split(':')
                     dur = o.timestamp - i.timestamp
                     g = EventX(name, pid, tid, str(i.timestamp), str(dur), i.metastring)
