@@ -1,11 +1,6 @@
 import sys
 import json
 
-if len(sys.argv) == 2:
-    logfile = sys.argv[1]
-else:
-    logfile = "F:\\work\\TGL_scalability_VT_hang\\trace_hang_f100.log"
-
 class EventItem():
     def __init__(self, line):
         self.line = line
@@ -376,6 +371,18 @@ def buildJsonRequest(tag, tdb, outjson):
     print('build json for ' + tag + '... done!')
 
 if __name__ == "__main__":
+    cmd_opt = {"-a":0}
+    if len(sys.argv) == 1:
+        logfile = "F:\\trace.log"
+    if len(sys.argv) == 2:
+        logfile = sys.argv[1]
+    elif len(sys.argv) == 3:
+        logfile = sys.argv[1]
+        if sys.argv[2] == "-a":
+            cmd_opt['-a'] = 1
+    else:
+        print("ERROR: Invalid command arguments!")
+
     outjson = []
     tdb = TraceDB(logfile)
     tdb.initalize()
@@ -385,14 +392,14 @@ if __name__ == "__main__":
     buildJsonEngine(tdb, outjson)
     buildJsonContext(tdb, outjson)
     buildJsonMemory(tdb, outjson)
-
-    buildJsonRequest('queue', tdb, outjson)
-    buildJsonRequest('add', tdb, outjson)
     buildJsonRequest('submit', tdb, outjson)
-    buildJsonRequest('execute', tdb, outjson)
-    buildJsonRequest('in', tdb, outjson)
-    buildJsonRequest('out', tdb, outjson)
-    buildJsonRequest('retire', tdb, outjson)
+    if cmd_opt['-a'] == 1:
+        buildJsonRequest('queue', tdb, outjson)
+        buildJsonRequest('add', tdb, outjson)
+        buildJsonRequest('execute', tdb, outjson)
+        buildJsonRequest('in', tdb, outjson)
+        buildJsonRequest('out', tdb, outjson)
+        buildJsonRequest('retire', tdb, outjson)
 
     with open(logfile.split('.')[0]+'.json', 'wt') as f:
         f.writelines('[\n')
