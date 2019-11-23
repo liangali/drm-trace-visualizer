@@ -233,7 +233,7 @@ def buildJsonProc(tdb, outjson):
         arg = '{"name":"' + p + '"}'
         pid = p.split('-')[1]
         if pid == '0':
-            pid = '10'
+            pid = '20'
         tid = '0'
         gproc = EventMeta('process_name', pid, tid, arg)
         gthread = EventMeta('thread_name', pid, tid, arg)
@@ -305,7 +305,7 @@ def buildJsonContext(tdb, outjson):
                 if e.ctx == c:
                     gevent = EventX(e.seqno, pid, tid, str(e.timestamp), "10", e.metastring)
                     outjson.append(gevent.toString())
-    print('build json for context done.')
+    print('build json for context done!')
 
 def buildJsonMemory(tdb, outjson):
     mem_count = 0
@@ -337,16 +337,20 @@ def buildJsonMemory(tdb, outjson):
         outjson.append(c.toString())
     print('build json for memory... done!')
 
-def buildJsonSubmit(tdb, outjson):
-    pid, tid = '6', '0'
-    arg = '{"name":"' + 'CMD Submission' + '"}'
+def buildJsonRequest(tag, tdb, outjson):
+    req_dict = {"queue":"6", "add":"7", "submit":"8", "execute":"9", "in":"10", "out":"11", "retire":"12"}
+    if tag not in req_dict.keys():
+        return
+    event_name = "i915_request_" + tag
+    pid, tid = req_dict[tag], '0'
+    arg = '{"name":"' + 'request ' + tag + '"}'
     gproc = EventMeta('process_name', pid, tid, arg)
     gsort = EventMeta('process_sort_index', pid, tid, '{"sort_index":"' + pid + '"}')
     outjson.append(gproc.toString())
     outjson.append(gsort.toString())
-    elsubmit = tdb.getEventsByName('i915_request_submit')
+    el = tdb.getEventsByName(event_name)
     ctxlist = []
-    for e in elsubmit:
+    for e in el:
         tid = e.ctx
         if e.ctx not in ctxlist:
             ctxlist.append(e.ctx)
@@ -357,8 +361,7 @@ def buildJsonSubmit(tdb, outjson):
             outjson.append(gsort.toString())
         g = EventX(e.seqno, pid, tid, str(e.timestamp), "10", e.metastring)
         outjson.append(g.toString())
-
-    print('build json for submission... done!')
+    print('build json for ' + tag + '... done!')
 
 if __name__ == "__main__":
     outjson = []
@@ -370,7 +373,14 @@ if __name__ == "__main__":
     buildJsonEngine(tdb, outjson)
     buildJsonContext(tdb, outjson)
     buildJsonMemory(tdb, outjson)
-    buildJsonSubmit(tdb, outjson)
+
+    #buildJsonRequest('queue', tdb, outjson)
+    #buildJsonRequest('add', tdb, outjson)
+    buildJsonRequest('submit', tdb, outjson)
+    #buildJsonRequest('execute', tdb, outjson)
+    #buildJsonRequest('in', tdb, outjson)
+    #buildJsonRequest('out', tdb, outjson)
+    #buildJsonRequest('retire', tdb, outjson)
 
     with open(logfile.split('.')[0]+'.json', 'wt') as f:
         f.writelines('[\n')
