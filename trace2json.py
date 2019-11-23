@@ -19,6 +19,7 @@ class EventItem():
         self.complete = ''
         self.gemobj = ''
         self.gemsize = ''
+        self.freq = ''
         self.metadata = {}
         self.metastring = ""
         self.parse(line)
@@ -46,6 +47,7 @@ class EventItem():
         self.complete = self.getValue('completed?')
         self.gemobj = self.getValue('obj')
         self.gemsize = self.getValue('size')
+        self.freq = self.getValue('new_freq')
         self.setMeta()
 
     def setMeta(self):
@@ -344,6 +346,22 @@ def buildJsonMemory(tdb, outjson):
         outjson.append(c.toString())
     print('build json for memory... done!')
 
+def buildJsonGpuFreqency(tdb, outjson):
+    graphname = "GPU frequency"
+    arg = '{"name":"' + 'GpuFreq' + '"}'
+    pid, tid = '6', '0'
+    gproc = EventMeta('process_name', pid, tid, arg)
+    gthread = EventMeta('thread_name', pid, tid, arg)
+    gsort = EventMeta('process_sort_index', pid, tid, '{"sort_index":"' + pid + '"}')
+    outjson.append(gproc.toString())
+    outjson.append(gthread.toString())
+    outjson.append(gsort.toString())
+    gpufreq = tdb.getEventsByName('intel_gpu_freq_change')
+    for e in gpufreq:
+        c = EventC(graphname, pid, tid, str(e.timestamp), e.freq)
+        outjson.append(c.toString())
+    print('build json for GPU frequency... done!')
+
 def buildJsonRequest(tag, tdb, outjson):
     req_dict = {"queue":"6", "add":"7", "submit":"8", "execute":"9", "in":"10", "out":"11", "retire":"12"}
     if tag not in req_dict.keys():
@@ -392,7 +410,9 @@ if __name__ == "__main__":
     buildJsonEngine(tdb, outjson)
     buildJsonContext(tdb, outjson)
     buildJsonMemory(tdb, outjson)
+    buildJsonGpuFreqency(tdb, outjson)
     buildJsonRequest('submit', tdb, outjson)
+
     if cmd_opt['-a'] == 1:
         buildJsonRequest('queue', tdb, outjson)
         buildJsonRequest('add', tdb, outjson)
