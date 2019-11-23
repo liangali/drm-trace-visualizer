@@ -363,7 +363,7 @@ def buildJsonGpuFreqency(tdb, outjson):
     print('build json for GPU frequency... done!')
 
 def buildJsonRequest(tag, tdb, outjson):
-    req_dict = {"queue":"6", "add":"7", "submit":"8", "execute":"9", "in":"10", "out":"11", "retire":"12"}
+    req_dict = {"queue":"10", "add":"11", "submit":"12", "execute":"13", "in":"14", "out":"15", "retire":"16"}
     if tag not in req_dict.keys():
         return
     event_name = "i915_request_" + tag
