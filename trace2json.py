@@ -20,6 +20,7 @@ class EventItem():
         self.hw_id = ''
         self.ctx = ''
         self.seqno = ''
+        self.port = ''
         self.complete = ''
         self.gemobj = ''
         self.gemsize = ''
@@ -46,6 +47,7 @@ class EventItem():
         self.hw_id = self.getValue('hw_id')
         self.ctx = self.getValue('ctx')
         self.seqno = self.getValue('seqno')
+        self.port = self.getValue('port')
         self.complete = self.getValue('completed?')
         self.gemobj = self.getValue('obj')
         self.gemsize = self.getValue('size')
@@ -67,6 +69,8 @@ class EventItem():
             self.metadata["ctx"] = self.ctx
         if len(self.seqno) > 0:
             self.metadata["seqno"] = self.seqno
+        if len(self.port) > 0:
+            self.metadata["port"] = self.port
         self.metastring = json.dumps(self.metadata)
 
 class TraceDB():
@@ -374,13 +378,13 @@ if __name__ == "__main__":
     buildJsonContext(tdb, outjson)
     buildJsonMemory(tdb, outjson)
 
-    #buildJsonRequest('queue', tdb, outjson)
-    #buildJsonRequest('add', tdb, outjson)
+    buildJsonRequest('queue', tdb, outjson)
+    buildJsonRequest('add', tdb, outjson)
     buildJsonRequest('submit', tdb, outjson)
-    #buildJsonRequest('execute', tdb, outjson)
-    #buildJsonRequest('in', tdb, outjson)
-    #buildJsonRequest('out', tdb, outjson)
-    #buildJsonRequest('retire', tdb, outjson)
+    buildJsonRequest('execute', tdb, outjson)
+    buildJsonRequest('in', tdb, outjson)
+    buildJsonRequest('out', tdb, outjson)
+    buildJsonRequest('retire', tdb, outjson)
 
     with open(logfile.split('.')[0]+'.json', 'wt') as f:
         f.writelines('[\n')
