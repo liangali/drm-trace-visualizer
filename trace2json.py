@@ -34,7 +34,9 @@ class EventItem():
     def parse(self, line):
         seg = line.split()
         self.process = seg[0].strip()
-        self.pname, self.pid = self.process.rsplit('-', 1)
+        self.pid = self.process.split('-')[-1]
+        pname_end = len(self.process) - len(self.pid) - 1
+        self.pname = self.process[0 : pname_end]
         self.cpu = seg[1][1:-1]
         self.timestamp = int(seg[2][:-1].replace('.', ''))
         self.eventname = seg[3][:-1]
@@ -288,7 +290,7 @@ def buildJsonGpuFreqency(tdb, outjson):
 def buildJsonProc(tdb, outjson):
     for p in tdb.procs:
         arg = '{"name":"' + p + '"}'
-        pid = p.split('-')[1]
+        pid = p.split('-')[-1]
         if pid == '0':
             pid = '20'
         tid = '0'
@@ -350,7 +352,7 @@ def buildJsonContext(tdb, outjson):
         elretire = tdb.getEventsByName('i915_request_retire')
         if len(elqueue) == 0:
             continue
-        pid = p.split('-')[1]
+        pid = p.split('-')[-1]
         for c in ctxs:
             tid = c
             argThread = '{"name":"' + 'GPU Context ' + c + '"}'
