@@ -291,8 +291,8 @@ def buildJsonProc(tdb, outjson):
     for p in tdb.procs:
         arg = '{"name":"' + p + '"}'
         pid = p.split('-')[-1]
-        if pid == '0':
-            pid = '20'
+        if pid == '0'or pid == '1':
+            pid = '2' + pid
         tid = '0'
         gproc = EventMeta('process_name', pid, tid, arg)
         gthread = EventMeta('thread_name', pid, tid, arg)
