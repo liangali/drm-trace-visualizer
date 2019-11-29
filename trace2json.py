@@ -246,7 +246,7 @@ def removeDuplicatedSeqno(el):
         el.remove(r)
 
 def buildJsonMemory(tdb, outjson):
-    mem_count = 0
+    ecount = 0
     graphname = "GEM memory usage"
     arg = '{"name":"' + 'Memory' + '"}'
     pid, tid = '5', '0'
@@ -256,12 +256,13 @@ def buildJsonMemory(tdb, outjson):
     outjson.append(gproc.toString())
     outjson.append(gthread.toString())
     outjson.append(gsort.toString())
-
+    mem_count = 0
     gem_create = tdb.getEventsByName('i915_gem_object_create')
     for ec in gem_create:
         mem_count = mem_count + int(ec.gemsize, 0)
         c = EventC(graphname, pid, tid, str(ec.timestamp), str(mem_count))
         outjson.append(c.toString())
+        ecount = ecount + 1
 
     gem_destroy = tdb.getEventsByName('i915_gem_object_destroy')
     for ed in gem_destroy:
@@ -273,9 +274,11 @@ def buildJsonMemory(tdb, outjson):
         mem_count = mem_count - int(dsize, 0)
         c = EventC(graphname, pid, tid, str(ed.timestamp), str(mem_count))
         outjson.append(c.toString())
-    print('build json for memory... done!')
+        ecount = ecount + 1
+    print('build json for memory... done!', ecount)
 
 def buildJsonGpuFreqency(tdb, outjson):
+    ecount = 0
     graphname = "GPU frequency"
     arg = '{"name":"' + 'GpuFreq' + '"}'
     pid, tid = '6', '0'
@@ -289,9 +292,11 @@ def buildJsonGpuFreqency(tdb, outjson):
     for e in gpufreq:
         c = EventC(graphname, pid, tid, str(e.timestamp), e.freq)
         outjson.append(c.toString())
-    print('build json for GPU frequency... done!')
+        ecount = ecount + 1
+    print('build json for GPU frequency... done!', ecount)
 
 def buildJsonProc(tdb, outjson):
+    ecount = 0
     for p in tdb.procs:
         arg = '{"name":"' + p + '"}'
         pid = p.split('-')[-1]
@@ -307,9 +312,11 @@ def buildJsonProc(tdb, outjson):
         for e in tdb.getEventsByProc(p):
             gevent = EventX(e.eventname, pid, tid, str(e.timestamp), "1", e.metastring)
             outjson.append(gevent.toString())
-    print('build json for process... done!')
+            ecount = ecount + 1
+    print('build json for process... done!', ecount)
 
 def buildJsonEngine(tdb, outjson):
+    ecount = 0
     for engine in tdb.engines:
         engineName = {'0':'Render', '1':'BLT', '2':'VDBOX', '3':'VEBOX', '4':'CCS'}
         pid, tid = engine.split(':')
@@ -338,6 +345,7 @@ def buildJsonEngine(tdb, outjson):
                     dur = o.timestamp - i.timestamp
                     g = EventX(name, pid, tid, str(i.timestamp), str(dur), i.metastring)
                     outjson.append(g.toString())
+                    ecount = ecount + 1
                     prev_seqno = i.seqno
                     elo.remove(o)
                     break
@@ -347,9 +355,11 @@ def buildJsonEngine(tdb, outjson):
                 dur = 10
                 g = EventX(name, pid, tid, str(i.timestamp), str(dur), i.metastring)
                 outjson.append(g.toString())
-    print('build json for engine... done!')
+                ecount = ecount + 1
+    print('build json for engine... done!', ecount)
 
 def buildJsonContext(tdb, outjson):
+    ecount = 0
     for p in tdb.procs:
         ctxs = tdb.getCtxsByProc(p)
         elqueue = tdb.getEventsByNameAndProc('i915_request_queue', p)
@@ -366,9 +376,11 @@ def buildJsonContext(tdb, outjson):
                 if e.ctx == c:
                     gevent = EventX(e.seqno, pid, tid, str(e.timestamp), "10", e.metastring)
                     outjson.append(gevent.toString())
-    print('build json for context done!')
+                    ecount = ecount + 1
+    print('build json for context done!', ecount)
 
 def buildJsonRequest(tag, tdb, outjson):
+    ecount = 0
     req_dict = {"queue":"10", "add":"11", "submit":"12", "execute":"13", "in":"14", "out":"15", "retire":"16"}
     if tag not in req_dict.keys():
         return
@@ -392,7 +404,8 @@ def buildJsonRequest(tag, tdb, outjson):
             outjson.append(gsort.toString())
         g = EventX(e.seqno, pid, tid, str(e.timestamp), "10", e.metastring)
         outjson.append(g.toString())
-    print('build json for ' + tag + '... done!')
+        ecount = ecount + 1
+    print('build json for ' + tag + '... done!', ecount)
 
 if __name__ == "__main__":
     cmd_opt = {"-a":0}
@@ -409,8 +422,8 @@ if __name__ == "__main__":
 
     outjson = []
     tdb = TraceDB(logfile)
-    tdb.initalize()
-    print('structuralize trace log... done!')
+    num = tdb.initalize()
+    print('structuralize trace log... done!', num)
 
     buildJsonProc(tdb, outjson)
     buildJsonEngine(tdb, outjson)
