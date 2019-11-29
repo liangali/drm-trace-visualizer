@@ -12,6 +12,7 @@ class EventItem():
         self.eventname = ''
         self.dev = ''
         self.engine = ''
+        self.ring = ''  # old trace log has ring info, but no engine info
         self.hw_id = ''
         self.ctx = ''
         self.seqno = ''
@@ -42,6 +43,7 @@ class EventItem():
         self.eventname = seg[3][:-1]
         self.dev = self.getValue('dev')
         self.engine = self.getValue('engine')
+        self.ring = self.getValue('ring')
         self.hw_id = self.getValue('hw_id')
         self.ctx = self.getValue('ctx')
         self.seqno = self.getValue('seqno')
@@ -50,6 +52,8 @@ class EventItem():
         self.gemobj = self.getValue('obj')
         self.gemsize = self.getValue('size')
         self.freq = self.getValue('new_freq')
+        if self.ring != '' and self.engine == '':
+            self.engine = self.ring + ':0'
         self.setMeta()
 
     def setMeta(self):
@@ -393,7 +397,7 @@ def buildJsonRequest(tag, tdb, outjson):
 if __name__ == "__main__":
     cmd_opt = {"-a":0}
     if len(sys.argv) == 1:
-        logfile = "F:\\trace.log"
+        logfile = "F:\\vaocl_full2.log"
     if len(sys.argv) == 2:
         logfile = sys.argv[1]
     elif len(sys.argv) == 3:
