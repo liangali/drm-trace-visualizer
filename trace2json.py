@@ -430,6 +430,7 @@ if __name__ == "__main__":
     buildJsonContext(tdb, outjson)
     buildJsonMemory(tdb, outjson)
     buildJsonGpuFreqency(tdb, outjson)
+    buildJsonRequest('queue', tdb, outjson)
     buildJsonRequest('submit', tdb, outjson)
 
     if cmd_opt['-a'] == 1:
