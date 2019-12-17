@@ -1,10 +1,10 @@
 # drm-trace-visualizer BKM
 
-## step 0: prerequisite 
+## **Step 0: prerequisite** 
 
-### a. rebuild linux kernel to enable i915/drm low-level trace
+#### a. rebuild linux kernel to enable i915/drm low-level trace
 
-### b. step install trace-cmd
+#### b. step install trace-cmd
 
 ```bash
 sudo apt install trace-cmd
@@ -55,9 +55,9 @@ i915:i915_context_create
 i915:i915_context_free
 ```
 
-## step 1: capture drm trace log
+## **Step 1: capture drm trace log**
 
-### a. copy "trace.sh" script to target linux system and run below command
+#### a. copy "trace.sh" script to target linux system and run below command
 
 ```bash
 # 20 is the trace duration in seconds, means it will capture drm trace for 20 seconds.
@@ -66,20 +66,20 @@ i915:i915_context_free
 ```
 **Note**: don't set this duration too large, as it will caputre a very big trace and will long time to parse in next step
 
-### b. run your application
+#### b. run your application
 ```bash
 # run your application in terminal/GUI as usual, make sure your interest part is in trace duration time 
 ```
 **Note**: docker container environemtn is also supported
 
-### c. run below command to trace data to trace long
+#### c. run below command to convert trace data to trace log
 ```bash
-trace-cmd report > your_trace_log_file.log
+trace-cmd report >your_trace_log_file.log
 ```
 
-## step 2: convert trace log to chrome json
+## **Step 2: generate chrome tracing json file from trace log**
 
-### the conversion can be done in either Linux or Windows
+#### it can be run either on Linux or Windows
 
 ```bash
 # Windows command line
@@ -90,14 +90,15 @@ python trace2json.py your_trace_log_file.log
 # Linux command line
 python3 trace2json.py your_trace_log_file.log
 ```
-**Note**: you can use "-a" option in command line, which will build graphs for all i915 scheduling event (very helpful for inspecting i915 scheduling flow)
 
-## step 3: visualize trace
+**Note**: you can use "-a" option in command line, which will build graphs for all i915 scheduling events (very helpful for inspecting i915 scheduling flow)
 
-### open chrome browser (either on Windows or Linux), type "chrome:://tracing" in the address bar, click "Load" button and load the json file generated from previous step.
+## **Step 3: visualize trace**
+
+#### open chrome browser (either on Windows or Linux), type "chrome:://tracing" in the address bar, click "Load" button and load the json file generated from previous step.
 
 **Note**: press "?" botton in the top right corner to get help about how to navigate the visualization graph
 
-## visualization graph example
+## **visualization graph example**
 
 ![graph](graph/GST_VA_xcode.jpg "GStreamer example")
