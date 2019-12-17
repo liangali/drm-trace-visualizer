@@ -4,9 +4,9 @@
 
 #### a). rebuild linux kernel to enable i915/drm low-level trace
 
-refer to this [link](./kernel.md) to eanble low level trace in linux kernel
+Please refer to this [link](./kernel.md) for BKM
 
-#### b). step install trace-cmd
+#### b). install trace-cmd
 
 ```bash
 sudo apt install trace-cmd
@@ -63,10 +63,10 @@ i915:i915_context_free
 
 ```bash
 # 20 is the trace duration in seconds, means it will capture drm trace for 20 seconds.
-# you can chagne it to any valude depends on how long of your app will run
+# you can change it to any valude depends on how long of your app will run
 ./trace.sh 20 
 ```
-**Note**: don't set this duration too large, as it will caputre a very big trace and will long time to parse in next step
+**Note**: don't set this duration too large, as it will caputre a very big trace and will take long time to parse in next step
 
 #### b). run your application
 ```bash
