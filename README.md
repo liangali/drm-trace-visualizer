@@ -2,9 +2,11 @@
 
 ## **Step 0: prerequisite** 
 
-#### a. rebuild linux kernel to enable i915/drm low-level trace
+#### a). rebuild linux kernel to enable i915/drm low-level trace
 
-#### b. step install trace-cmd
+refer to this [link](./kernel.md) to eanble low level trace in linux kernel
+
+#### b). step install trace-cmd
 
 ```bash
 sudo apt install trace-cmd
@@ -57,7 +59,7 @@ i915:i915_context_free
 
 ## **Step 1: capture drm trace log**
 
-#### a. copy "trace.sh" script to target linux system and run below command
+#### a). copy "trace.sh" script to target linux system and run below command
 
 ```bash
 # 20 is the trace duration in seconds, means it will capture drm trace for 20 seconds.
@@ -66,13 +68,13 @@ i915:i915_context_free
 ```
 **Note**: don't set this duration too large, as it will caputre a very big trace and will long time to parse in next step
 
-#### b. run your application
+#### b). run your application
 ```bash
 # run your application in terminal/GUI as usual, make sure your interest part is in trace duration time 
 ```
 **Note**: docker container environemtn is also supported
 
-#### c. run below command to convert trace data to trace log
+#### c). run below command to convert trace data to trace log
 ```bash
 trace-cmd report >your_trace_log_file.log
 ```
