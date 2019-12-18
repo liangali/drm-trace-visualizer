@@ -434,7 +434,6 @@ if __name__ == "__main__":
     buildJsonRequest('submit', tdb, outjson)
 
     if cmd_opt['-a'] == 1:
-        buildJsonRequest('queue', tdb, outjson)
         buildJsonRequest('add', tdb, outjson)
         buildJsonRequest('execute', tdb, outjson)
         buildJsonRequest('in', tdb, outjson)
