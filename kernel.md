@@ -30,6 +30,7 @@ cd kernel_source
 sudo make mrproper 
 sudo make clean 
 # just exit to use default config. it will generate .config file at current folder
+sudo make menuconfig
 ```
 Open .config file in editor and search for "**CONFIG_DRM_I915_LOW_LEVEL_TRACEPOINTS**", change it from
 ```
