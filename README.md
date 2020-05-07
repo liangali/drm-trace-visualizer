@@ -57,6 +57,13 @@ i915:i915_context_create
 i915:i915_context_free
 ```
 
+#### c). generate trace.sh
+
+```bash
+python3 gen_sh.py
+```
+
+
 ## **Step 1: capture drm trace log**
 
 #### a). copy "trace.sh" script to target linux system and run below command
