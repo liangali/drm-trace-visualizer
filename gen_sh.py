@@ -1,6 +1,6 @@
 import os
 
-tracefile = "trace_cmd.sh"
+tracefile = "trace.sh"
 logfile = 'tmp.log'
 cmd = 'sudo trace-cmd list | grep i915 >' + logfile
 os.system(cmd)
