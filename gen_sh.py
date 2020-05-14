@@ -14,7 +14,7 @@ tracesh.append('sudo trace-cmd record \\\n')
 for l in lines:
     c = '-e "' + l.strip() + '" \\\n'
     tracesh.append(c)
-#tracesh.append('sleep $1\n')
+tracesh.append('capturing trace...\n')
 
 with open(tracefile, "w") as f:
     for i in tracesh:
