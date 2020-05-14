@@ -69,19 +69,19 @@ python3 gen_sh.py
 #### a). copy "trace.sh" script to target linux system and run below command
 
 ```bash
-# 20 is the trace duration in seconds, means it will capture drm trace for 20 seconds.
-# you can change it to any valude depends on how long of your app will run
-./trace.sh 20 
+./trace.sh
 ```
-**Note**: don't set this duration too large, as it will caputre a very big trace and will take long time to parse in next step
 
 #### b). run your application
 ```bash
-# run your application in terminal/GUI as usual, make sure your interest part is in trace duration time 
+# run your application in terminal/GUI as usual
+run application
 ```
 **Note**: docker container environemtn is also supported
 
-#### c). run below command to convert trace data to trace log
+#### c). Ctr+C to stop trace capture
+
+#### d). run below command to convert trace data to trace log
 ```bash
 trace-cmd report >your_trace_log_file.log
 ```
