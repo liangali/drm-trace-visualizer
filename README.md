@@ -4,7 +4,9 @@
 
 #### a). rebuild linux kernel to enable i915/drm low-level trace
 
-Please refer to this [link](./kernel.md) for BKM
+for open source kernel, please refer to this [link](./kernel.md) for BKM
+
+for internal kernel, please refer to this [link](./kernel-internal.md) for BKM
 
 #### b). install trace-cmd
 
