@@ -110,6 +110,16 @@ python3 trace2json.py your_trace_log_file.log
 
 **Note**: press "?" botton in the top right corner to get help about how to navigate the visualization graph
 
+## Alternative usage with auto.py
+
+Execute application + trace-cmd + trace2json
+
+```bash
+python3 auto.py "app_cmd_line"
+# or
+python3 auto.py run.sh
+```
+
 ## **visualization graph example**
 
 ![graph](graph/GST_VA_xcode.jpg "GStreamer example")
