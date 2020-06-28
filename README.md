@@ -13,9 +13,19 @@ for internal kernel, please refer to this [link](./kernel-internal.md) for BKM
 ```bash
 sudo apt install trace-cmd
 
+# or build from source (if need newer version)
+git clone https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git
+cd trace-cmd
+make
+sudo make install
+```
+
+```bash
 # to verify i915 low level trace is enabled 
 sudo trace-cmd list | grep i915
+```
 
+```bash
 # if the low level drm trace is enabled correctly, it will print below event list
 i915:intel_cpu_fifo_underrun
 i915:intel_pch_fifo_underrun
@@ -64,7 +74,6 @@ i915:i915_context_free
 ```bash
 python3 gen_sh.py
 ```
-
 
 ## **Step 1: capture drm trace log**
 
