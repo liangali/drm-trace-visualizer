@@ -56,8 +56,7 @@ if __name__ == "__main__":
     else:
         print('ERROR: Bad command line argument')
         print('example: python3 auto.py "app_cmd_line" ')
-        app_cmd = 'h264encode'
-        #exit()
+        exit()
 
     main(app_cmd)
 
