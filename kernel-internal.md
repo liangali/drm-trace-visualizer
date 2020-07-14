@@ -1,5 +1,4 @@
 
-
 # build-internal-linux-kernel
 
 ## 1. get linux kernel source code
@@ -12,11 +11,19 @@ You may need to apply the access at the first time and clone below repos,
 drm-intel	
 drm-intel-internal-ci-tags
 ```
+(To apply the access, please click **Request a role in this Project** at the project home page.)
 Detailed clone info could be seen by clicking the right side download button. 
+```bash
+Note: 
+The default branch is master branch but it's empty by default. You need to checkout the branch
+you want as,
+git checkout atspo
+```
 Take **atspo** kernel as an example, if you want to build a specific version of kernel by yourself, 
 please get the commit ID of that build from 
 ```bash
 https://ubit-gfx.intel.com/overview/24989
+Commit ID could be found at the “SCM-Changes” section 
 ```
 and checkout the code in the drm-intel repo; if you want to build CI_DII_XXXX kernel by yourself, 
 then please checkout the code in drm-intel-internal-ci-tags.
@@ -33,7 +40,8 @@ minizip \
 libidn11-dev \
 libidn11 \
 bison \
-flex
+flex  \
+libelf-dev 
 ```
 
 ## 3. Edit config to enable low level trace
@@ -58,7 +66,11 @@ to
 ```
 CONFIG_DRM_I915_LOW_LEVEL_TRACEPOINTS=y
 ```
-to enable low level trace
+to enable low level trace. You could change CONFIG_LOCALVERSION to include a suitable nametag to 
+identify the change being made. (no capital letters should be used) Example:
+```bash
+CONFIG_LOCALVERSION="+atspo204-debug-disable"
+```
 
 ## 4. build 
 ```bash
