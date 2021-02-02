@@ -1,3 +1,8 @@
 test
 __pycache__
 *.log
+trace.sh
+trace.dat
+drm*.log
+drm*.json
+
