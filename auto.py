@@ -28,6 +28,8 @@ def main(app_cmd):
     trace_cmd_start = ''
     trace_cmd_start += 'sudo trace-cmd start '
     for l in lines:
+        if short_trace == True and 'i915_request' not in l:
+            continue
         c = '-e "' + l.strip() + '" '
         trace_cmd_start += c
 
@@ -48,11 +50,16 @@ def main(app_cmd):
 
     trace2json.execute(drm_logfile)
 
+short_trace = False
+
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 2 or len(sys.argv) == 3:
         app_cmd = sys.argv[1]
         if '.sh' in app_cmd and app_cmd.find('./') == -1:
             app_cmd = './' + app_cmd
+        if len(sys.argv) == 3:
+            if sys.argv[2] == '-short':
+                short_trace = True
     else:
         print('ERROR: Bad command line argument')
         print('example: python3 auto.py "app_cmd_line" ')
