@@ -88,7 +88,17 @@ python3 gen_sh.py
 # run your application in terminal/GUI as usual
 run application
 ```
-**Note**: docker container environemtn is also supported
+**Note**: 
+1. docker container environemtn is also supported;
+2. better to check if trace buffer is big enough or not,
+   ```bash
+   sudo cat /sys/kernel/debug/tracing/buffer_size_kb
+   ```
+   To enlarge trace buffer, 
+   ```bash
+   sudo echo 102400 > /sys/kernel/debug/tracing/buffer_size_kb
+   ```
+   (the specified size can't be very big, otherwise buffer allocation will be failed)
 
 #### c). Ctr+C to stop trace capture
 
